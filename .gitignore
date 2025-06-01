@@ -1,0 +1,152 @@
+# Python Artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+
+# PyInstaller (if you use it later for packaging)
+# *.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Virtual Environments
+.env
+.venv # This can be a file for venv-selector or a directory for the venv itself
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Sphinx documentation (if you use it)
+docs/_build/
+
+# Jupyter Notebook (if you use it for experiments)
+.ipynb_checkpoints
+
+# IDE & Editor Specific
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Neovim
+# Swap files
+*.swp
+*.swo
+# Session files (if you save them in the project root, e.g., Session.vim)
+# Session.vim
+# Undo directory (if you configure it to be project-local)
+.undodir/
+
+# Qt / QML Specific
+# Qt Creator project files (and similar IDEs)
+*.pro.user*
+*.qbs.user*
+*.creator.user*
+*.creator
+CMakeLists.txt.user
+
+# Compiled QML cache files (usually generated on target or specific builds)
+*.qmlc
+*.jsc
+
+# CMake build directories (if you use CMake with Qt Creator or similar)
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+
+# General Build directories (can be too broad, use with caution if you have other 'debug'/'release' folders)
+# debug/
+# release/
+
+# OS Generated Files
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+# Linux (and general editor backups)
+*~
+*.bak
+
+# Application Specific Data (IMPORTANT: Actively ignoring these as requested)
+# SQLite database files (and other potential database files)
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal # SQLite rollback journal
+*.db-wal    # SQLite write-ahead log
+*.db-shm    # SQLite shared-memory file
+# Example: my_database_file.db
+
+# Directory for user-uploaded images (if you create one like 'user_media/')
+# user_media/
+
+# Log files
+*.log
+logs/
+
+# Local configuration files (if they contain secrets or user-specific paths)
+# config.local.ini
+# settings.local.json
+# .env # (already covered by virtual envs, but good to be explicit if used for app secrets)
+
+# Secrets
+secrets.yaml
+secrets.json
+*.pem
+*.key
