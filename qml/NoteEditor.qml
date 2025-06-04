@@ -11,7 +11,7 @@ Rectangle {
         id: bg
         anchors.fill: parent
         source: "../assets/bg.jpeg"
-        fillMode: Image.PreserveAspectFill
+        fillMode: Image.PreserveAspectCrop
         z: -1 // Sending the image to background
     }
 
@@ -81,7 +81,8 @@ Rectangle {
                 TextArea {
                     id: noteContentEditor
                     width: parent.width // Fills scroll view width
-                    height: contentHeight // Height expands with content
+                    height: parent.height
+
 
                     font.pixelSize: 18
                     wrapMode: TextEdit.WordWrap // Wraps text
