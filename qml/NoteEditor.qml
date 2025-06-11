@@ -42,20 +42,24 @@ Rectangle {
                     CustomButton {
                         iconSource: "../assets/icons/left-arrow.png" // Placeholder icon
                         tooltipText: "Back"
-                        onClicked: console.log("Back button pressed");
+                        onClicked: {
+                            console.log("Back button pressed");
+                            title.text = Utils.getFormattedDate( new Date())
+                            noteContentEditor.text = "";
+                        }
                     }
 
                     Item { Layout.fillWidth: true } // Spacer to push title to center
 
-                    // Daily Title
+                    // Daily Title - This will be updated by opened file's title
                     Text {
                         id: title // Heading of the page
-                        // Removed Layout.fillWidth: true from here, as spacers will manage width distribution
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter // Centers text within its own bounds
-                        font.pixelSize: parent.width / 30 // Font size that adapts to window size
-                        color: "black" // Font color
-                        textFormat: Text.StyledText // Using StyledText to use bold and underline tags
-                        text: Utils.getFormattedDate(new Date()) + Utils.getFormattedTime(new Date()) // Formatted date and time
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.pixelSize: parent.width / 30
+                        color: "black"
+                        textFormat: Text.StyledText
+                        // Initial text for the title, will be overwritten if a file is opened
+                        text: Utils.getFormattedDate(new Date()) 
                     }
 
                     Item { Layout.fillWidth: true } // Spacer to push title to center
@@ -64,7 +68,11 @@ Rectangle {
                     CustomButton {
                         iconSource: "../assets/icons/close.png" // Placeholder icon
                         tooltipText: "Close"
-                        onClicked: console.log("Close button pressed");
+                        onClicked: {
+                            console.log("Close button pressed");
+                            title.text = "";
+                            noteContentEditor.text = "";
+                        }
                     }
                 }
             }
@@ -82,7 +90,6 @@ Rectangle {
                     id: noteContentEditor
                     width: parent.width // Fills scroll view width
                     height: parent.height
-
 
                     font.pixelSize: 18
                     wrapMode: TextEdit.WordWrap // Wraps text
@@ -102,56 +109,126 @@ Rectangle {
             }
         }
 
-        // Floating lower navigation bar (no changes needed here based on current feedback)
+        // Floating lower navigation bar
         Rectangle {
             id: lowerNavFloatingBar
-            // Positioned relative to the 'page' rectangle, floating above content
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 40 // Distance from the bottom of the page
-            width: 460 // Fixed width for the floating bar
-            height: 50 // Fixed height for the floating bar
-            radius: 25 // Rounded corners for a softer look
-            color: "#AAFFFFFF" // Semi-transparent white for a "floating" effect
+            anchors.bottomMargin: 40
+            width: 460
+            height: 50
+            radius: 25
+            color: "#AAFFFFFF"
 
-            // RowLayout for buttons inside the floating bar
             RowLayout {
-                anchors.fill: parent // Fills the floating bar
-                anchors.margins: 5 // Apply margins to the RowLayout to create internal spacing
-                spacing: 15 // Spacing between buttons
-                Layout.alignment: Qt.AlignHCenter // Center the row of buttons horizontally
+                anchors.fill: parent
+                anchors.margins: 5
+                spacing: 15
+                Layout.alignment: Qt.AlignHCenter
 
-                // Placeholder buttons (adjust count as needed, e.g., 4 or 5)
                 CustomButton {
-                    Layout.preferredWidth: 40 // All buttons same fixed width
-                    Layout.preferredHeight: 40 // All buttons same fixed height
-                    iconSource: "../assets/icons/circle.png" // Placeholder icon
-                    tooltipText: "Option 1"
-                    onClicked: console.log("Option 1 clicked");
+                    Layout.preferredWidth: 40
+                    Layout.preferredHeight: 40
+                    iconSource: "../assets/icons/save.png"
+                    tooltipText: "Save"
+                    onClicked: {
+                        fileHandler.saveFileDialog() // Trigger Python save dialog
+                        // This console log will show *before* the file is actually saved
+                        // due to the asynchronous nature of dialogs and signals.
+                        // The actual "File Saved" message should come from the signal handler.
+                    }
                 }
                 CustomButton {
                     Layout.preferredWidth: 40
                     Layout.preferredHeight: 40
-                    iconSource: "../assets/icons/link.png" // Placeholder icon
-                    tooltipText: "Option 2"
-                    onClicked: console.log("Option 2 clicked");
+                    iconSource: "../assets/icons/search.png" // Using this for "Open"
+                    tooltipText: "Open Note"
+                    onClicked: {
+                        fileHandler.openFileDialog() // Trigger Python open dialog
+                    }
                 }
                 CustomButton {
                     Layout.preferredWidth: 40
                     Layout.preferredHeight: 40
-                    iconSource: "../assets/icons/search.png" // Placeholder icon
-                    tooltipText: "Option 3"
-                    onClicked: console.log("Option 3 clicked");
+                    iconSource: "../assets/icons/close.png"
+                    tooltipText: "Close"
+                    onClicked: console.log("File Closed");
                 }
                 CustomButton {
                     Layout.preferredWidth: 40
                     Layout.preferredHeight: 40
-                    iconSource: "../assets/icons/ai.png" // Placeholder icon
-                    tooltipText: "Option 4"
-                    onClicked: console.log("Option 4 clicked");
+                    iconSource: "../assets/icons/delete.png"
+                    tooltipText: "File Deleted"
+                    onClicked: console.log("File Deleted");
                 }
             }
         }
     }
-}
 
+    // --- ADDED: Text elements to display the paths ---
+    Text {
+        id: uploadedFilePathText
+        text: "Last Opened: (None)"
+        font.pixelSize: 14
+        color: "gray"
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.margins: 10
+        width: parent.width / 2 - 15
+        horizontalAlignment: Text.AlignLeft
+        wrapMode: Text.WrapAnywhere
+    }
+
+    Text {
+        id: downloadedFilePathText
+        text: "Last Saved: (None)"
+        font.pixelSize: 14
+        color: "gray"
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.margins: 10
+        width: parent.width / 2 - 15
+        horizontalAlignment: Text.AlignRight
+        wrapMode: Text.WrapAnywhere
+    }
+
+    // --- Connections block for Python backend signals ---
+    Connections {
+        target: fileHandler
+
+        // Handler for when the save dialog is closed and a path is confirmed
+        function onSavePathConfirmed(filePath) { // Parameter name changed to filePath for clarity
+            downloadedFilePathText.text = "Last Saved: " + (filePath ? filePath : "(Cancelled)")
+            if (filePath) {
+                console.log("QML: Received save path: " + filePath)
+                // Now, call the Python function to actually save the content
+                fileHandler.saveTextToFile(filePath, noteContentEditor.text)
+            } else {
+                console.log("QML: File save operation cancelled.")
+            }
+        }
+
+        // Handler for when the open dialog is closed and a path is selected
+        function onFilePathSelected(filePath) { // Parameter name changed to filePath for clarity
+            uploadedFilePathText.text = "Last Opened: " + (filePath ? filePath : "(Cancelled)")
+            if (filePath) {
+                console.log("QML: File path received from Python (for opening): " + filePath)
+                // Now, call the Python function to open and read the file content
+                fileHandler.openFile(filePath)
+            } else {
+                console.log("QML: File open operation cancelled.")
+            }
+        }
+
+        // Handler for when the file content is successfully read by Python
+        function onFileContentOpened(titleName, content) { // Renamed signal and parameters for clarity
+            if (titleName && content) {
+                title.text = titleName // Update the title text
+                noteContentEditor.text = content // Set the editor content
+                console.log("QML: Content loaded successfully.")
+            } else {
+                console.log("QML: Failed to load file content (or cancelled).")
+            }
+        }
+    }
+}

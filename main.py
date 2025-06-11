@@ -1,12 +1,18 @@
 import sys
 import os
 import signal
-from PySide6.QtGui import QGuiApplication
+from PySide6.QtWidgets import QApplication
 from PySide6.QtQml import QQmlApplicationEngine
 
+from utils.file_handler import FileHandler
+
 if __name__ == "__main__":
-    app = QGuiApplication(sys.argv)
+    app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()
+
+    handler = FileHandler()
+
+    engine.rootContext().setContextProperty("fileHandler", handler)
 
     # Get the directory of the current script
     # This makes the path relative to our project

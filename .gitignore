@@ -153,4 +153,5 @@ secrets.json
 
 # Extras
 assets/icons/
+tests/
 
