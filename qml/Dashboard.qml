@@ -1,10 +1,14 @@
 import QtQuick 6.9
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 6.9
-import "../components/"
+import "../components/" // Adjust if your components are in a different relative path
 
 Rectangle {
     id: dashboardRoot
+    // You might want to define width/height here or let the ApplicationWindow size it.
+    // If this is the root of your window:
+    // width: 1024
+    // height: 768
 
     Image {
         id: bg
@@ -14,7 +18,7 @@ Rectangle {
         z: -2
     }
 
-    Item {
+    Item { // Navbar remains the same, assuming it's positioned correctly
         id: navbar
         width: parent.width
         height: 60
@@ -62,61 +66,44 @@ Rectangle {
             }
         }
     }
+
+    // --- Main Content Area (Scrollable) ---
     ScrollView {
+        id: mainContentScroll
         anchors.top: navbar.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.topMargin: 10
+        clip: true // Ensure content outside bounds is clipped
 
-        Item {
-            width: parent.width
+        // IMPORTANT: The contentItem of ScrollView should be a single Item or Layout
+        // that defines its intrinsic size based on its children.
+        // We want this ColumnLayout to determine its overall height.
+        contentItem: ColumnLayout {
+            id: mainDashboardContentLayout
+            width: mainContentScroll.width // Very important: Match ScrollView's width
+            spacing: 20 // Spacing between major sections
 
-            ColumnLayout {
-                width: parent.width
-                spacing: 10
+            // --- Calendar Section ---
+            RowLayout {
+                Layout.fillWidth: true // Allow this row to fill the width of mainDashboardContentLayout
+                Layout.alignment: Qt.AlignHCenter // Center the content of this RowLayout horizontally
 
-                /* RowLayout {
-                    width: parent.width
-                    spacing: 5
+                Item { Layout.fillWidth: true } // Left spacer
 
-                    Repeater {
-                        model: 3
-                        Rectangle {
-                            Layout.fillWidth: true
-                            height: 40
-                            border.width: 1
-                            color: "red"
-                        }
-                    }
+                CalendarView { // Make sure this component name matches your file name: CalendarView.qml
+                    // Give the CalendarView its preferred dimensions.
+                    // These will be respected by the surrounding Layouts.
+                    Layout.preferredWidth: 400
+                    Layout.preferredHeight: 400 // Calendar needs height to show all rows
+                    calendarBackend: calBackend  // Ensure this name matches your Python context property
                 }
-                */
-                Item {
-                    width: parent.width
-                    RowLayout {
-                        width: parent.width
-    
-                        Item { Layout.fillWidth: true }
-                    
-                        CalendarView {
-                            dateObject: new Date()
-                            width: 500
-                            height: 300
-                        }
-                    }
-                }
-
-                RowLayout {
-                    width: parent.width
-
-                    Rectangle {
-                        height: 1000
-                        Layout.fillWidth: true
-                        color: "transparent"
-                    }
-                }
+                Item { Layout.fillWidth: true } // Right spacer
             }
+
+            // --- Other Dashboard Content ---
+
         }
     }
 }
-
