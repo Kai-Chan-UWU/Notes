@@ -90,16 +90,22 @@ Rectangle {
                 Layout.fillWidth: true // Allow this row to fill the width of mainDashboardContentLayout
                 Layout.alignment: Qt.AlignHCenter // Center the content of this RowLayout horizontally
 
+                NoteView {
+                    Layout.preferredWidth: 300
+                    Layout.preferredHeight: 500
+
+                    title: (new Date()).getDate().toString()
+                }
+
                 Item { Layout.fillWidth: true } // Left spacer
 
                 CalendarView { // Make sure this component name matches your file name: CalendarView.qml
                     // Give the CalendarView its preferred dimensions.
                     // These will be respected by the surrounding Layouts.
-                    Layout.preferredWidth: 400
-                    Layout.preferredHeight: 400 // Calendar needs height to show all rows
+                    Layout.preferredWidth: 600
+                    Layout.preferredHeight: 500 // Calendar needs height to show all rows
                     calendarBackend: calBackend  // Ensure this name matches your Python context property
                 }
-                Item { Layout.fillWidth: true } // Right spacer
             }
 
             // --- Other Dashboard Content ---

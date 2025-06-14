@@ -10,16 +10,9 @@ Item {
     property var dateObject: new Date()
     property bool expanded: true
 
-        
-    Component.onCompleted: {
-        console.log("Month:", calendarBackend ? calendarBackend.month_name : "null")
-        console.log("Model row count:", calendarBackend ? calendarBackend.calendarModel.count : "null")
-    }
-
-
     ColumnLayout {
         anchors.fill: parent
-        spacing: 15
+        spacing: 5
 
             Text {
                 text: calendarBackend ? calendarBackend.month_name : "Loading..."
