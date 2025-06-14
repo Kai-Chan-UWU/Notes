@@ -6,6 +6,7 @@ from PySide6.QtGui import QGuiApplication # Not strictly needed here, but kept f
 from PySide6.QtQml import QQmlApplicationEngine # qml_register_type REMOVED
 from PySide6.QtCore import QDate # Explicitly import QDate
 
+
 class CalendarModel(QAbstractListModel):
     # --- Roles ---
     DateRole = Qt.UserRole + 1
@@ -79,14 +80,12 @@ class CalendarModel(QAbstractListModel):
         current_day = first_day_of_month
         while current_day.month == month:
             qdate_obj = QDate(current_day.year, current_day.month, current_day.day)
+            formatted_date = qdate_obj.toString("yyyy-MM-dd")
+
             self._dates_data.append({
                 "day": str(current_day.day),
                 "hasNotes": qdate_obj.toJulianDay() in notes_in_month,
-                "fullDate": {
-                    "year": qdate_obj.year(),
-                    "month": qdate_obj.month(),
-                    "day": qdate_obj.day()
-                }
+                "fullDate": formatted_date
             })
             current_day += timedelta(days=1)
 

@@ -6,16 +6,23 @@ from PySide6.QtQml import QQmlApplicationEngine
 
 from utils.file_handler import FileHandler
 from utils.calendar import CalendarBackend
+from utils.eventbridge import EventBridge
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()
-
+    
+    # file handler
     handler = FileHandler()
     engine.rootContext().setContextProperty("fileHandler", handler)
-
+    
+    # backend for calendar
     calbackend = CalendarBackend()
     engine.rootContext().setContextProperty("calBackend", calbackend)
+
+    # signals
+    bridge = EventBridge()
+    engine.rootContext().setContextProperty("eventBridge", bridge)
 
     # Get the directory of the current script
     # This makes the path relative to our project

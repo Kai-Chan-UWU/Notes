@@ -1,11 +1,19 @@
-// qml/components/Calendar.qml
+// /components/Calendar.qml
 import QtQuick 6.9
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 6.9
 import "."
+import "../utils/ui.js" as Utils
 
-Item {
+Rectangle {
     id: calendar_component
+    radius: 8
+    color: "#ffffffcc"
+    border.color: "#cccccc"
+    border.width: 1
+    Layout.rightMargin: 30
+    Layout.leftMargin: 10
+
     property var calendarBackend: null
     property var dateObject: new Date()
     property bool expanded: true
@@ -14,12 +22,20 @@ Item {
         anchors.fill: parent
         spacing: 5
 
+        Rectangle {
+            color: "transparent"
+            radius: 4
+            Layout.fillWidth: true
+            Layout.topMargin: 10
+            Layout.bottomMargin: 5
+            height: 40
+
             Text {
+                anchors.centerIn: parent
                 text: calendarBackend ? calendarBackend.month_name : "Loading..."
-                font.pointSize: 20
+                font.pointSize: 18
                 font.bold: true
-                horizontalAlignment: Text.AlignHCenter
-                Layout.fillWidth: true
+                }
             }
 
         GridLayout {
@@ -48,7 +64,6 @@ Item {
                     date: model.date
                     hasNotes: model.hasNotes
                     fullDate: model.fullDate
-                    onClicked: if (model.date !== "") console.log("Clicked date:", model.date, "Full Date:", model.fullDate)
                 }
             }
         }

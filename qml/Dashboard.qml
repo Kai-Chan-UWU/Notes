@@ -91,18 +91,17 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter // Center the content of this RowLayout horizontally
 
                 NoteView {
-                    Layout.preferredWidth: 300
+                    Layout.preferredWidth: 500
                     Layout.preferredHeight: 500
-
-                    title: (new Date()).getDate().toString()
                 }
 
-                Item { Layout.fillWidth: true } // Left spacer
+                // Item { Layout.fillWidth: true } // Left spacer
 
                 CalendarView { // Make sure this component name matches your file name: CalendarView.qml
                     // Give the CalendarView its preferred dimensions.
                     // These will be respected by the surrounding Layouts.
-                    Layout.preferredWidth: 600
+                    //Layout.preferredWidth: 600
+                    Layout.fillWidth: true
                     Layout.preferredHeight: 500 // Calendar needs height to show all rows
                     calendarBackend: calBackend  // Ensure this name matches your Python context property
                 }

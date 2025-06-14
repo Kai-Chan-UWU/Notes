@@ -2,12 +2,18 @@
 import QtQuick 6.9
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 6.9
+import "../utils/ui.js" as Utils
 
 Rectangle {
     id: noteView
-    color: "transparent"
+    radius: 8
+    color: "#ffffffcc"
+    border.color: "#cccccc"
+    border.width: 1
+    Layout.rightMargin: 10
+    Layout.leftMargin: 30
 
-    property string title: ""
+    property string title: Utils.getFormattedDate(new Date())
 
     ColumnLayout {
         anchors.fill: parent
@@ -15,12 +21,14 @@ Rectangle {
 
         Text {
             id: noteView_title
-            text: title ? title : ""
+            text: title
             horizontalAlignment: Text.AlignHCenter
             Layout.fillWidth: true
             Layout.preferredHeight: 30  // Ensures fixed height at the top
+            Layout.topMargin: 10
+            Layout.bottomMargin: 5
             font.bold: true
-            font.pixelSize: 20
+            font.pointSize: 18
         }
 
         ScrollView {
@@ -48,6 +56,13 @@ Rectangle {
                     noteView_text.focus = true;
                 }
             }
+        }
+    }
+
+    Connections {
+        target: eventBridge
+        function onDayClicked (day) {
+            title = day;
         }
     }
 }
